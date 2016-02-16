@@ -1,7 +1,7 @@
 // OOP244 Workshop 5: Classes with resources 
 // File: PhoneNumber.cpp
 // Version: 1.0
-// Date: 2015/10/13
+// Date:  2016/02/15
 // Author: Fardad Soleimanloo
 /////////////////////////////////////////////
 
@@ -12,13 +12,13 @@
 using namespace std;
 namespace sict{
   void PhoneNumber::setEmpty(){
-    _area = _number = 0;
-    _type = (char*)0; // same as _type = nullptr, _type does not point to anything.
+    area_ = number_ = 0;
+    type_ = nullptr; // same as type_ = (char*)0; type_ does not point to anything.
   }
 
   bool PhoneNumber::isValid(int area, int number, const char* type)const{
-       // "_type && _type[0], same as: _type != nullptr && _type[0] != '\0', which means, 
-       //      first if _type is not null and is pointing to something, 
+       // "type_ && type_[0], same as: type_ != nullptr && type_[0] != '\0', which means, 
+       //      first if type_ is not null and is pointing to something, 
        //      then if "something" is not an empty string and etc....
        // lazy evaluation
     return type && type[0] && area >= 111 && area <= 999 && number >= 1111111 && number <= 9999999;
@@ -27,12 +27,12 @@ namespace sict{
   bool PhoneNumber::allocateAndCopy(int area, int number, const char* type){
     bool valid = isValid(area, number, type);
     if (valid){
-      _area = area;
-      _number = number;
+      area_ = area;
+      number_ = number;
       // dynamic resource allocation: 
-      delete[] _type; // if not null delete the target of _type for new allocation 
-      _type = new char[strlen(type) + 1];
-      strcpy(_type, type);
+      delete[] type_; // if not null delete the target of type_ for new allocation 
+      type_ = new char[strlen(type) + 1];
+      strcpy(type_, type);
     }
     return valid;
   }
@@ -41,28 +41,20 @@ namespace sict{
   PhoneNumber::PhoneNumber(){
     setEmpty();
   }
-  /* no need for this
-  PhoneNumber::PhoneNumber(int area, int number, const char* type){
-    _type = (char*)0; // same as _type = nullptr, setting unused pointer to null so allocateAndCopy does not delete
-    // some random pointed memory causing segmentation fault. 
-    if (!allocateAndCopy(area, number, type)){ // reusing logic
-      setEmpty();
-    }
-  }
-  */
+
 
   PhoneNumber::PhoneNumber(const PhoneNumber& cp){
-    _type = (char*)0; // same as _type = nullptr, setting unused pointer to null so allocateAndCopy does not delete
+    type_ = nullptr; // same as type_ = (char*)0, setting unused pointer to null so allocateAndCopy does not delete
                      // some random pointed memory causing segmentation fault. 
-    if (!allocateAndCopy(cp._area, cp._number, cp._type)){ // reusing logic
+    if (!allocateAndCopy(cp.area_, cp.number_, cp.type_)){ // reusing logic
       setEmpty();
     }
   }
   PhoneNumber::~PhoneNumber(){
-    delete[] _type;
+    delete[] type_;
   }
   PhoneNumber& PhoneNumber::operator=(const PhoneNumber& ro){
-    if (!allocateAndCopy(ro._area, ro._number, ro._type)){// reusing logic
+    if (!allocateAndCopy(ro.area_, ro.number_, ro.type_)){// reusing logic
       setEmpty();
     }
     return *this;
@@ -100,11 +92,11 @@ namespace sict{
 
   void PhoneNumber::display(bool goToNewLine)const{
     if (!isEmpty()){
-      cout <<setw(15)<<left<<setfill('.') << _type << ", " << _area << " " << _number / 10000 << "-" << setw(4) << setfill('0') << _number % 10000;
+      cout <<setw(15)<<left<<setfill('.') << type_ << ", " << area_ << " " << number_ / 10000 << "-" << setw(4) << setfill('0') << number_ % 10000;
       if (goToNewLine) cout << endl;
     }
   }
   bool PhoneNumber::isEmpty()const{
-    return _type == (char*)0;
+    return type_ == nullptr;
   }
 }

@@ -1,7 +1,7 @@
 // OOP244 Workshop 5: Classes with resources 
 // File: w5_at_home.cpp
 // Version: 1.0
-// Date: 2015/10/13
+// Date: 2016/02/15
 // Author: Fardad Soleimanloo
 // Description:
 // This file tests in-lab section of your workshop
